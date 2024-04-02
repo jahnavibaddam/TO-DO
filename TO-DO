@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <style>
+      .task-text {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+      .task-text:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Enter task..." />
+    <input type="time" id="timeInput" />
+    <button id="addTaskBtn">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const taskInput = document.getElementById("taskInput");
+        const timeInput = document.getElementById("timeInput");
+        const addTaskBtn = document.getElementById("addTaskBtn");
+        const taskList = document.getElementById("taskList");
+
+        // Function to add a new task
+        function addTask() {
+          if (taskInput.value !== "") {
+            const li = document.createElement("li");
+            const taskText = document.createElement("span");
+            taskText.textContent = taskInput.value;
+            taskText.classList.add("task-text");
+            const taskTime = document.createElement("span");
+            taskTime.textContent = timeInput.value;
+            taskTime.classList.add("task-text");
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function () {
+              li.remove();
+            });
+            li.appendChild(taskText);
+            li.appendChild(taskTime);
+            li.appendChild(deleteButton);
+            taskList.appendChild(li);
+            taskInput.value = "";
+            timeInput.value = "";
+            li.addEventListener("click", editTask);
+          }
+        }
+
+        // Function to edit a task
+        function editTask() {
+          const oldTask = this.children[0].textContent;
+          const oldTime = this.children[1].textContent;
+          const newTask = prompt("Enter new task:", oldTask);
+          const newTime = prompt("Enter new time:", oldTime);
+          if (
+            newTask !== null &&
+            newTask !== "" &&
+            newTime !== null &&
+            newTime !== ""
+          ) {
+            this.children[0].textContent = newTask;
+            this.children[1].textContent = newTime;
+          }
+        }
+
+        // Event listener for adding a task
+        addTaskBtn.addEventListener("click", addTask);
+
+        // Event listener for pressing Enter to add a task
+        taskInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            addTask();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
